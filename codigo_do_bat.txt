@@ -10,20 +10,21 @@ echo       por Linha de Comando (CMD)
 echo ========================================== by bumbaloo
 echo.
 
+:: path do 7-Zip
 set "sevenzip=C:\Program Files\7-Zip\7z.exe"
 if not exist "%sevenzip%" (
     echo 7-Zip nao instalado ou fora do diretorio padrao.
     pause
     exit /b
 )
-
+:: path do arquivo com senha
 set /p archive="Digite o caminho do arquivo com senha: "
 if not exist "%archive%" (
     echo Arquivo nao existente.
     pause
     exit /b
 )
-::C:\ abaixo old path
+:: WORDLISTS
 set "wordlist=wordlist_mu.txt"
 if not exist "%wordlist%" (
     echo Lista de palavras 1 nao encontrada, atualize o programa.
@@ -59,7 +60,22 @@ if not exist "%wordlist5%" (
     echo Lista de palavras 6 nao encontrada, atualize o programa.
     set wordlist5=""
 )
+:: fim das WORDLISTS
 
+
+:: Começo de tentativas em cada wordlist, explicação da verificação
+::  Ele verifica uma variavel que armazena o status de erro atual do sistema e ve se é igual a 0(não possui erros)
+::  Se não houver erros significa que a senha foi encontrada, assim mostrando ela e extraindo o arquivo para a pasta criada no C:\
+::      if !errorlevel! equ 0 (
+::          echo ====================================
+::          echo SENHA ENCONTRADA: !senha!
+::          echo Os arquivos foram extraidos para a pasta "arquivo_crackeado"
+::          echo ====================================
+::          pause
+::          exit /b
+::      )
+
+:: for das wordlists
 for /f "delims=" %%a in (%wordlist%) do (
     set "senha=%%a"
     echo Teste senha lista 0: !senha!
@@ -144,6 +160,9 @@ for /f "delims=" %%a in (%wordlist5%) do (
     )
 )
 
+:: FIM dos for das tentativas das wordlists
+
+:: caso nenhuma senha nao de error ele avisa que nenhuma senha funcionou
 echo.
 echo ==========================================
 echo Nenhuma senha funcionou.
